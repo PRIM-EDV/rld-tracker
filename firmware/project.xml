@@ -17,6 +17,7 @@
     <module>modm:platform:uart:1</module>
     <module>modm:processing:protothread</module>
     <module>modm:processing:resumable</module>
+    <module>modm:processing:timer</module>
     <module>modm:processing</module>
     <module>modm:build:scons</module>
   </modules>

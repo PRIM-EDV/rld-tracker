@@ -75,8 +75,6 @@ namespace gps
 	using Uart = Usart1;
 }
 
-
-
 inline void
 initialize()
 {
