@@ -4,3 +4,6 @@
 [submodule "firmware/driver/lora"]
 	path = firmware/driver/lora
 	url = https://github.com/lmoesch/modm-lora
+[submodule "firmware/driver/gps"]
+	path = firmware/driver/gps
+	url = https://github.com/lmoesch/modm-gps
