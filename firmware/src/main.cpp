@@ -5,25 +5,29 @@
 // ----------------------------------------------------------------------------
 #include "board/board.hpp"
 #include "src/threads/lora.hpp"
+#include "src/threads/gps.hpp"
 
-#include "driver/gps/protocol/nmea0183.hpp"
+
 
 using namespace Board;
 namespace Board::lora{
     LoraThread<Spi, Nss, D0> thread;
 }
 
+namespace Board::gps {
+    GPSThread<Uart> thread;
+}
+
 int main()
 {
     Board::initialize();
 
-    NMEA0183<Board::gps::Uart> nmea;
-    // nmea.message = nullptr;
-
     lora::thread.initialize();
+    gps::thread.initialize();
 
+    uint8_t c;
     while(true) {
-        lora::thread.run();
-        
+        // lora::thread.run();
+        gps::thread.run();        
     }
 }

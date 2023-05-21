@@ -6,6 +6,7 @@
     <option name="modm:build:build.path">build</option>
     <option name="modm:build:openocd.cfg">conf/openocd.cfg</option>
     <option name="modm:target">stm32f030cct6</option>
+    <option name="modm:platform:heap:allocator">block</option>
   </options>
   <modules>
     <module>modm:architecture:register</module>
@@ -15,6 +16,9 @@
     <module>modm:platform:gpio</module>
     <module>modm:platform:spi:2</module>
     <module>modm:platform:uart:1</module>
+    <module>modm:platform:uart:2</module>
+    <module>modm:platform:uart:3</module>
+    <module>modm:platform:heap</module>
     <module>modm:processing:protothread</module>
     <module>modm:processing:resumable</module>
     <module>modm:processing:timer</module>

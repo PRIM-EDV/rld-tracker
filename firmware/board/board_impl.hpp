@@ -9,10 +9,10 @@
 namespace Board
 {
 
-// namespace rpi
-// {
-//     modm::IODeviceWrapper<Uart, modm::IOBuffer::DiscardIfFull> rpiIODevice;
-// 	modm::IOStream ioStream(rpiIODevice);
-// }
+namespace usb
+{
+    modm::IODeviceWrapper<Uart, modm::IOBuffer::DiscardIfFull> usbIODevice;
+	modm::IOStream ioStream(usbIODevice);
+}
 
 }

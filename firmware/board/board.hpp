@@ -29,6 +29,7 @@ struct SystemClock
 	// Usart
 	static constexpr uint32_t Usart1 = Apb;
 	static constexpr uint32_t Usart2 = Apb;
+	static constexpr uint32_t Usart3 = Apb;
 
     //Spi
     static constexpr uint32_t Spi2   = Apb;
@@ -37,11 +38,12 @@ struct SystemClock
 	enable()
 	{
 		Rcc::enableInternalClock(); // 8 MHz
+        // (internal clock / 2) * 12 = 48MHz
         const Rcc::PllFactors pllFactors{
 			.pllMul = 12,
 			.pllPrediv = 2
 		};
-        Rcc::enablePll(Rcc::PllSource::HsiDiv2, pllFactors);
+        Rcc::enablePll(Rcc::PllSource::InternalClock, pllFactors);
 		// set flash latency for 48MHz
 		Rcc::setFlashLatency<Frequency>();
 		// switch system clock to PLL output
@@ -54,6 +56,13 @@ struct SystemClock
 		return true;
 	}
 };
+
+namespace usb {
+    using Rx = GpioInputB11;
+    using Tx = GpioOutputB10;
+
+    using Uart = Usart3;
+}
 
 namespace lora {
 	using Rst = GpioOutputA8;
@@ -90,8 +99,11 @@ initialize()
 	lora::Spi::connect<lora::Sck::Sck, lora::Mosi::Mosi, lora::Miso::Miso>();
 	lora::Spi::initialize<SystemClock, 6000000ul>();
 
-	// rpi::Uart::connect<rpi::Tx::Tx, rpi::Rx::Rx>();
-	// rpi::Uart::initialize<SystemClock, 9600_Bd>();
+	usb::Uart::connect<usb::Tx::Tx, usb::Rx::Rx>();
+	usb::Uart::initialize<SystemClock, 9600_Bd>();
+
+    gps::Uart::connect<gps::Tx::Tx, gps::Rx::Rx>();
+	gps::Uart::initialize<SystemClock, 9600_Bd>();
 }
 
 }
