@@ -1,3 +1,7 @@
+*.DB
+*.DB-shm
+*.DB-wal
+
 firmware/modm
 firmware/build
 firmware/Sconstruct

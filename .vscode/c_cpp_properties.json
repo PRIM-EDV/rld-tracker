@@ -1,0 +1,38 @@
+{
+    "configurations": [
+        {
+            "name": "STM32",
+            "compilerPath": "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/12.2 mpacbti-rel1/bin/arm-none-eabi-g++.exe",
+            "includePath": [
+                // "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/12.2 mpacbti-rel1/arm-none-eabi/include/c++/12.2.1",
+                // "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/12.2 mpacbti-rel1/arm-none-eabi/include/c++/12.2.1/arm-none-eabi",
+                // "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/12.2 mpacbti-rel1/arm-none-eabi/include/c++/12.2.1/backward",
+                // "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/12.2 mpacbti-rel1/lib/gcc/arm-none-eabi/12.2.1/include",
+                // "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/12.2 mpacbti-rel1/lib/gcc/arm-none-eabi/12.2.1/include-fixed",
+                // "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/12.2 mpacbti-rel1/arm-none-eabi/include",
+                "${workspaceRoot}/firmware/**"
+            ],
+            "defines": [
+                "__UINT8_TYPE__=unsigned char",
+                "__INT8_TYPE__=char"
+            ],
+            "intelliSenseMode": "windows-gcc-arm",
+            "browse": {
+                "path": [
+                    // "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/12.2 mpacbti-rel1/arm-none-eabi/include/c++/12.2.1",
+                    // "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/12.2 mpacbti-rel1/arm-none-eabi/include/c++/12.2.1/arm-none-eabi",
+                    // "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/12.2 mpacbti-rel1/arm-none-eabi/include/c++/12.2.1/backward",
+                    // "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/12.2 mpacbti-rel1/lib/gcc/arm-none-eabi/12.2.1/include",
+                    // "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/12.2 mpacbti-rel1/lib/gcc/arm-none-eabi/12.2.1/include-fixed",
+                    // "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/12.2 mpacbti-rel1/arm-none-eabi/include",
+                    "${workspaceRoot}/firmware/**"
+                ],
+                "limitSymbolsToIncludedHeaders": false,
+                "databaseFilename": "${workspaceRoot}/.vscode/browse.vc.db"
+            },
+            "cStandard": "c99",
+            "cppStandard": "c++23"
+        }
+    ],
+    "version": 4
+}
