@@ -27,6 +27,8 @@ template <typename Uart>
 class GPSThread : public modm::pt::Protothread, private modm::NestedResumable<2>
 {
 public:
+    GeoCoordinates position;
+
     void
     initialize()
     {
@@ -40,10 +42,18 @@ public:
 
         while (true) {
             PT_CALL(gps.update());
+
+            gps.getGeoCoordinates(position.latitude, position.longitude);
+
+            Board::usb::ioStream << position.latitude; 
+            // Board::usb::ioStream << position.longitude; 
+
         };
 
         PT_END();
     };
+
+
 
 private:
 	uint8_t data[8];

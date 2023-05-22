@@ -7,8 +7,6 @@
 #include "src/threads/lora.hpp"
 #include "src/threads/gps.hpp"
 
-
-
 using namespace Board;
 namespace Board::lora{
     LoraThread<Spi, Nss, D0> thread;
@@ -27,7 +25,7 @@ int main()
 
     uint8_t c;
     while(true) {
-        // lora::thread.run();
-        gps::thread.run();        
+        lora::thread.run();
+        gps::thread.run(); 
     }
 }

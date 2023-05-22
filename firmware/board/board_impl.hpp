@@ -11,7 +11,7 @@ namespace Board
 
 namespace usb
 {
-    modm::IODeviceWrapper<Uart, modm::IOBuffer::DiscardIfFull> usbIODevice;
+    modm::IODeviceWrapper<Uart, modm::IOBuffer::BlockIfFull> usbIODevice;
 	modm::IOStream ioStream(usbIODevice);
 }
 
