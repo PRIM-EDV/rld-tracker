@@ -8,6 +8,7 @@
 #include "src/threads/gps.hpp"
 
 using namespace Board;
+
 namespace Board::lora{
     LoraThread<Spi, Nss, D0> thread;
 }
@@ -23,9 +24,11 @@ int main()
     lora::thread.initialize();
     gps::thread.initialize();
 
+    fiber::Scheduler::run();
+
     uint8_t c;
-    while(true) {
-        lora::thread.run();
-        gps::thread.run(); 
-    }
+    // while(true) {
+    //     lora::thread.run();
+    //     gps::thread.run(); 
+    // }
 }

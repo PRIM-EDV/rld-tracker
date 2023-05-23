@@ -7,11 +7,14 @@
     <option name="modm:build:openocd.cfg">conf/openocd.cfg</option>
     <option name="modm:target">stm32f030cct6</option>
     <option name="modm:platform:uart:1:buffer.rx">16</option>
+    <option name="modm:processing:protothread:use_fiber">yes</option>
   </options>
   <modules>
+    <module>modm:io</module>
     <module>modm:architecture:register</module>
     <module>modm:architecture:spi.device</module>
     <module>modm:platform:clock</module>
+    <module>modm:platform:heap</module>
     <module>modm:platform:core</module>
     <module>modm:platform:gpio</module>
     <module>modm:platform:spi:2</module>

@@ -66,9 +66,9 @@ namespace usb {
 
 namespace lora {
 	using Rst = GpioOutputA8;
-	using D0 = GpioInputA3;
+	using D0 = GpioInputA11;
 
-	using Nss = GpioOutputA4;
+	using Nss = GpioOutputB12;
 	using Sck = GpioOutputB13;
 	using Miso = GpioInputB14;
 	using Mosi = GpioOutputB15;

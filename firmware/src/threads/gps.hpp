@@ -7,13 +7,14 @@
 #define GPS_THREAD_HPP
 
 #ifndef M_PI
-    #define M_PI 3.14159265358979323846
+    #define M_PI (double) 3.14159265358979323846
 #endif
 
 #include <modm/processing.hpp>
 #include <modm/processing/protothread.hpp>
 
 #include "driver/gps/beitian/bn280.hpp"
+#include "shared/shared.hpp"
 
 typedef struct {
     double latitude;
@@ -45,9 +46,8 @@ public:
 
             gps.getGeoCoordinates(position.latitude, position.longitude);
 
-            Board::usb::ioStream << position.latitude; 
-            // Board::usb::ioStream << position.longitude; 
-
+            shared::latitude = position.latitude;
+            shared::longitude = position.longitude;
         };
 
         PT_END();

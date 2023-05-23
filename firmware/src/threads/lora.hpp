@@ -13,11 +13,12 @@
 
 #include "board/board.hpp"
 #include "driver/ai-thinker/ra_02.hpp"
+#include "shared/shared.hpp"
 
 using namespace modm;
 
 template <typename SpiMaster, typename Cs, typename D0>
-class LoraThread : public modm::pt::Protothread, private modm::NestedResumable<2>
+class LoraThread : public modm::pt::Protothread, private modm::NestedResumable<3>
 {
 public:
     void
@@ -39,6 +40,8 @@ public:
         // // Set output power to 10 dBm (boost mode)
         RF_CALL_BLOCKING(modem.setOutputPower(0x08));
         RF_CALL_BLOCKING(modem.setOperationMode(sx127x::Mode::RecvCont));
+
+        timeout.restart(5s);
     };
 
     bool
@@ -47,13 +50,24 @@ public:
         PT_BEGIN();
 
         while (1) {
-            if(timeout.isExpired()){
+            PT_WAIT_UNTIL(timeout.isExpired() || messageAvailable());
 
+            if (messageAvailable()) {
+                RF_CALL(receiveMessage(data));
+                Board::usb::ioStream << "lat:" << shared::latitude << endl;
+                // BLUETOOTH << data[0] << ":" << data[1]<< ":" << data[2]<< ":" << data[3] << xpcc::endl;		
             }
-            if(PT_CALL(this->receiveMessage(this->data)))
-            {
-                this->setRldInfo(this->data);
-            };
+            
+            if(timeout.isExpired()){
+                                // Board::usb::ioStream << "lat:" << shared::latitude << endl;
+                RF_CALL(sendMessage(data));
+                timeout.restart(5s);
+            } 
+            // }
+            // if(PT_CALL(this->receiveMessage(this->data)))
+            // {
+            //     this->setRldInfo(this->data);
+            // };
         };
 
         PT_END();
@@ -65,22 +79,18 @@ public:
 
     };
 
-    ResumableResult<uint8_t>
+    ResumableResult<void>
 	receiveMessage(uint8_t* buffer)
     {
         RF_BEGIN();
 
-        while(true) {
-            RF_WAIT_UNTIL(D0::read());
-            RF_CALL(modem.read(sx127x::Address::IrqFlags, status, 1));
-            if(!(status[0] & (uint8_t) sx127x::RegIrqFlags::PayloadCrcError)) {
-                RF_CALL(modem.getPayload(buffer, 4));
-                RF_RETURN(4);
-            }
-            RF_CALL(modem.write(sx127x::Address::IrqFlags, 0xff));
+        RF_CALL(modem.read(sx127x::Address::IrqFlags, status, 1));
+        if(!(status[0] & (uint8_t) sx127x::RegIrqFlags::PayloadCrcError)) {
+            RF_CALL(modem.getPayload(buffer, 4));
         }
+        RF_CALL(modem.write(sx127x::Address::IrqFlags, 0xff));
 
-        RF_END_RETURN(0);
+        RF_END();
     };
 
     ResumableResult<uint8_t>
@@ -92,13 +102,14 @@ public:
         // build packet
 
         RF_CALL(modem.setPayloadLength(4));
-		RF_CALL(modem.sendPacket(data, 4));
+		RF_CALL(modem.sendPacket(buffer, 4));
 
 		PT_CALL(modem.setOperationMode(sx127x::Mode::RecvCont));
-		timeout.restart(5s);
 
         RF_END_RETURN(0);
     };
+
+
 
 private:
 	uint8_t data[8];
@@ -107,6 +118,27 @@ private:
     ShortTimeout timeout;
 
     Ra02<SpiMaster, Cs> modem;
+
+    void
+	buildPacket(){
+		uint16_t px;
+		uint16_t py;
+
+		// gpsThread.getPosition(px, py);
+
+		//XPCC_LOG_INFO << px << ":" << py << xpcc::endl;
+
+		data[0] = 1;
+		data[1] = (px >> 6) & 0x0F;
+		data[2] = (px << 2) | ((py >>8) & 0x03);
+		data[3] = (py) & 0xFF;
+	};
+
+    bool
+    messageAvailable() 
+    {
+        return D0::read();
+    }
 };
 
 #endif
