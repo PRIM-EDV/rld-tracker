@@ -54,7 +54,9 @@ public:
 
             if (messageAvailable()) {
                 RF_CALL(receiveMessage(data));
-                Board::usb::ioStream << data[0] << ":" << data[1]<< ":" << data[2]<< ":" << data[3] << endl;	
+                
+                Board::bluetooth::ioStream << data[0] << ":" << data[1]<< ":" << data[2]<< ":" << data[3] << endl;	
+                Board::usb::ioStream << data[0] << ":" << data[1]<< ":" << data[2]<< ":" << data[3] << endl;
             }
             
             if(timeout.isExpired()){

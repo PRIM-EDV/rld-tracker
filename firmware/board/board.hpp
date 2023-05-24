@@ -57,6 +57,18 @@ struct SystemClock
 	}
 };
 
+namespace led {
+    using blue = GpioOutputB4;
+    using yellow = GpioOutputB5;
+}
+
+namespace bluetooth {
+    using Rx = GpioInputA3;
+    using Tx = GpioOutputA2;
+
+    using Uart = Usart2;
+}
+
 namespace usb {
     using Rx = GpioInputB11;
     using Tx = GpioOutputB10;
@@ -99,11 +111,20 @@ initialize()
 	lora::Spi::connect<lora::Sck::Sck, lora::Mosi::Mosi, lora::Miso::Miso>();
 	lora::Spi::initialize<SystemClock, 6000000ul>();
 
-	usb::Uart::connect<usb::Tx::Tx, usb::Rx::Rx>();
-	usb::Uart::initialize<SystemClock, 9600_Bd>();
+    bluetooth::Uart::connect<bluetooth::Tx::Tx, bluetooth::Rx::Rx>();
+    bluetooth::Uart::initialize<SystemClock, 9600_Bd>();
 
     gps::Uart::connect<gps::Tx::Tx, gps::Rx::Rx>();
 	gps::Uart::initialize<SystemClock, 9600_Bd>();
+
+	usb::Uart::connect<usb::Tx::Tx, usb::Rx::Rx>();
+	usb::Uart::initialize<SystemClock, 9600_Bd>();
+
+    led::blue::setOutput();
+    led::yellow::setOutput();
+
+    led::blue::set();
+    led::yellow::set();
 }
 
 }

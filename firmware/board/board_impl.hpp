@@ -8,11 +8,14 @@
 
 namespace Board
 {
-
+namespace bluetooth
+{
+    modm::IODeviceWrapper<Uart, modm::IOBuffer::BlockIfFull> device;
+	modm::IOStream ioStream(device);
+}
 namespace usb
 {
-    modm::IODeviceWrapper<Uart, modm::IOBuffer::BlockIfFull> usbIODevice;
-	modm::IOStream ioStream(usbIODevice);
+    modm::IODeviceWrapper<Uart, modm::IOBuffer::BlockIfFull> device;
+	modm::IOStream ioStream(device);
 }
-
 }

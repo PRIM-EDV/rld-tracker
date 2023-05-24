@@ -44,6 +44,7 @@ public:
         while (true) {
             PT_CALL(gps.update());
 
+            setLED();
             setCartCoordinates();
         };
 
@@ -78,6 +79,14 @@ private:
         shared::px = (uint16_t) x;
         shared::py = (uint16_t) y;
 	}
+
+    void setLED() {
+        if (gps.latitude == 0 || gps.longitude == 0) {
+            Board::led::yellow::set();
+        } else {
+            Board::led::yellow::reset();
+        }
+    }
 };
 
 #endif
