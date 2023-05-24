@@ -6,6 +6,7 @@
 #include "board/board.hpp"
 #include "src/threads/lora.hpp"
 #include "src/threads/gps.hpp"
+#include "shared/shared.hpp"
 
 using namespace Board;
 
@@ -21,14 +22,10 @@ int main()
 {
     Board::initialize();
 
+    shared::trackerId = 1;
+
     lora::thread.initialize();
     gps::thread.initialize();
 
     fiber::Scheduler::run();
-
-    uint8_t c;
-    // while(true) {
-    //     lora::thread.run();
-    //     gps::thread.run(); 
-    // }
 }

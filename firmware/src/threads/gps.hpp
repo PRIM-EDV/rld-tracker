@@ -44,20 +44,15 @@ public:
         while (true) {
             PT_CALL(gps.update());
 
-            gps.getGeoCoordinates(position.latitude, position.longitude);
-
-            shared::latitude = position.latitude;
-            shared::longitude = position.longitude;
+            setCartCoordinates();
         };
 
         PT_END();
     };
 
-
-
 private:
 	uint8_t data[8];
-    double scaler = 1;
+    double scaler = 1.0;
 
     GeoCoordinates origin;
 
@@ -73,16 +68,16 @@ private:
 	};
 
 	void 
-	setPosition(double latitude, double longitude)
+	setCartCoordinates()
 	{
-	 double y = (origin.latitude - latitude) * 111300;
-	 double x = (longitude - origin.longitude) * scaler;
+        double y = (origin.latitude - gps.latitude) * 111300;
+        double x = (gps.longitude - origin.longitude) * scaler;
 
-	//  posCart.y = (uint16_t) y;
-	//  posCart.x = (uint16_t) x;
+        shared::latitude = gps.latitude;
+        shared::longitude = gps.longitude;
+        shared::px = (uint16_t) x;
+        shared::py = (uint16_t) y;
 	}
-
-
 };
 
 #endif

@@ -54,29 +54,16 @@ public:
 
             if (messageAvailable()) {
                 RF_CALL(receiveMessage(data));
-                Board::usb::ioStream << "lat:" << shared::latitude << endl;
-                // BLUETOOTH << data[0] << ":" << data[1]<< ":" << data[2]<< ":" << data[3] << xpcc::endl;		
+                Board::usb::ioStream << data[0] << ":" << data[1]<< ":" << data[2]<< ":" << data[3] << endl;	
             }
             
             if(timeout.isExpired()){
-                                // Board::usb::ioStream << "lat:" << shared::latitude << endl;
-                RF_CALL(sendMessage(data));
+                RF_CALL(sendMessage());
                 timeout.restart(5s);
             } 
-            // }
-            // if(PT_CALL(this->receiveMessage(this->data)))
-            // {
-            //     this->setRldInfo(this->data);
-            // };
         };
 
         PT_END();
-    };
-
-    void
-    setRldInfo(uint8_t* data)
-    {
-
     };
 
     ResumableResult<void>
@@ -94,41 +81,34 @@ public:
     };
 
     ResumableResult<uint8_t>
-	sendMessage(uint8_t* buffer)
+	sendMessage()
     {
         RF_BEGIN();
         RF_CALL(modem.setOperationMode(sx127x::Mode::Transmit));
 
-        // build packet
+        buildPacket();
 
         RF_CALL(modem.setPayloadLength(4));
-		RF_CALL(modem.sendPacket(buffer, 4));
+		RF_CALL(modem.sendPacket(data, 4));
 
 		PT_CALL(modem.setOperationMode(sx127x::Mode::RecvCont));
 
         RF_END_RETURN(0);
     };
 
-
-
 private:
 	uint8_t data[8];
     uint8_t status[1];
 
     ShortTimeout timeout;
-
     Ra02<SpiMaster, Cs> modem;
 
     void
 	buildPacket(){
-		uint16_t px;
-		uint16_t py;
+        uint16_t px = (shared::longitude != 0) ? shared::px : 0;
+        uint16_t py = (shared::latitude != 0) ? shared::py : 0;
 
-		// gpsThread.getPosition(px, py);
-
-		//XPCC_LOG_INFO << px << ":" << py << xpcc::endl;
-
-		data[0] = 1;
+		data[0] = shared::trackerId;
 		data[1] = (px >> 6) & 0x0F;
 		data[2] = (px << 2) | ((py >>8) & 0x03);
 		data[3] = (py) & 0xFF;
