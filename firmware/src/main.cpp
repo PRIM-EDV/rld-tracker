@@ -24,6 +24,9 @@ int main()
 
     shared::trackerId = 1;
 
+    delay(1000ms); // Wait for BT-device
+    bluetooth::ioStream << "AT+NAMERLD-" << shared::trackerId << "\r\n";
+
     lora::thread.initialize();
     gps::thread.initialize();
 
